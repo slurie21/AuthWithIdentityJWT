@@ -1,0 +1,12 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/AuthPractice/.vs
+/IdentityJWT/.vs/IdentityJWT
+/IdentityJWT/bin/Debug/net8.0
+/IdentityJWT.DataAccess/.vs/IdentityJWT.DataAccess
+/IdentityJWT.DataAccess/obj
+/IdentityJWT.Models/bin/Debug/net8.0
+/IdentityJWT.Models/obj
