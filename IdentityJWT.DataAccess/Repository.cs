@@ -1,5 +1,6 @@
 ﻿using IdentityJWT.DataAccess.IRepo;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,19 +21,24 @@ namespace IdentityJWT.DataAccess
             this.dbSet = _db.Set<T>();
         }
 
-        public void Add(T entity)
+        public async Task<bool> Add(T entity)
         {
-            dbSet.Add(entity);
+                await dbSet.AddAsync(entity);
+                return true;
+            
         }
 
-        public void Update(T entity)
+        public async Task<bool> Update(T entity)
         {
             dbSet.Update(entity);
+            return true;
         }
 
-        public void Remove(T entity)
+        public async Task<bool> Remove(T entity)
         {
-            dbSet.Remove(entity);
+                dbSet.Remove(entity);
+                return true;
+            
         }
 
         public async Task<int> DeleteUsingFilter(T entity, Func<T, bool> filter)

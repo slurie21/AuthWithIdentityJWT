@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using IdentityJWT.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,10 +10,12 @@ using System.Threading.Tasks;
 
 namespace IdentityJWT.DataAccess
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options)
+        public AppDbContext(DbContextOptions<AppDbContext> options): base(options)
         { }
+
+        public DbSet<JWTRefreshToken> JwtRefreshToken { get; set; }
 
     }
 }
