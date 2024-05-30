@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityJWT.Models", "Ident
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityJWT.DataAccess", "IdentityJWT.DataAccess\IdentityJWT.DataAccess.csproj", "{7A42E3B7-5BD2-47D1-992D-C5BA4AF9D2D4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityJWT.Utility", "IdentityJWT.Utility\IdentityJWT.Utility.csproj", "{C364DDBD-3361-47A3-B6CE-BE3A2BB50762}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{7A42E3B7-5BD2-47D1-992D-C5BA4AF9D2D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7A42E3B7-5BD2-47D1-992D-C5BA4AF9D2D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A42E3B7-5BD2-47D1-992D-C5BA4AF9D2D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C364DDBD-3361-47A3-B6CE-BE3A2BB50762}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C364DDBD-3361-47A3-B6CE-BE3A2BB50762}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C364DDBD-3361-47A3-B6CE-BE3A2BB50762}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C364DDBD-3361-47A3-B6CE-BE3A2BB50762}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
