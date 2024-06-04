@@ -14,13 +14,21 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 var connString = builder.Configuration.GetConnectionString("DefaultConn") ?? throw new InvalidOperationException("no connection string defined");
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(connString)
+    options.UseSqlServer(connString).EnableSensitiveDataLogging().LogTo(Console.WriteLine,LogLevel.Debug)
 );
 //builder.Services.AddIdentity
-//builder.Services.AddIdentityCore
-builder.Services.AddIdentityApiEndpoints<ApplicationUser>()
+//builder.Services.AddIdentityCore<ApplicationUser>()
+
+builder.Services.AddIdentityApiEndpoints<ApplicationUser>(options =>
+    {
+        options.User.RequireUniqueEmail = true;
+        options.SignIn.RequireConfirmedEmail = false;
+    }
+
+    )
     .AddApiEndpoints()
     .AddRoles<IdentityRole>()
+    .AddClaimsPrincipalFactory<UserClaimsPrincipalFactory<ApplicationUser, IdentityRole>>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
 
@@ -86,6 +94,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.MapIdentityApi<ApplicationUser>();
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();

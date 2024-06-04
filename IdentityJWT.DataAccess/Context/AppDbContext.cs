@@ -14,9 +14,11 @@ namespace IdentityJWT.DataAccess.Context
     public class AppDbContext : IdentityDbContext<ApplicationUser>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options): base(options)
-        { }
+        {}
+        
 
         public DbSet<JWTRefreshToken> JwtRefreshToken { get; set; }
+        public DbSet<EnterpriseLoggingRepo> EnterpriseLogging { get; set; }
 
     }
 }
