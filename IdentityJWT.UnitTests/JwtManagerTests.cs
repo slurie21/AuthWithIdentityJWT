@@ -17,8 +17,8 @@ namespace IdentityJWT.UnitTests
         public JwtManagerTests()
         {
             _configurationMock = new Mock<IConfiguration>();
-            _configurationMock.SetupGet(c => c["JWT_Secret"]).Returns("supersecretkey12345");
-            _configurationMock.SetupGet(c => c["JWT_Refresh_Secret"]).Returns("supersecretrefreshkey12345");
+            _configurationMock.SetupGet(c => c["JWT_Secret"]).Returns("6493e781134dc34fec23bcf2e98a67d804b639821067cc2b8dd4c3979371dc33");
+            _configurationMock.SetupGet(c => c["JWT_Refresh_Secret"]).Returns("c280176176b18ede58a06ec98e326ad6618db207ebbbf76224fbb84b6c3ec832");
 
             _jwtManager = new JwtManager(_configurationMock.Object);
         }
