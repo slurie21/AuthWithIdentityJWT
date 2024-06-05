@@ -18,7 +18,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 var connString = builder.Configuration.GetConnectionString("DefaultConn") ?? throw new InvalidOperationException("no connection string defined");
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(connString).EnableSensitiveDataLogging().LogTo(Console.WriteLine,LogLevel.Debug)
+    options.UseSqlServer(connString)
 );
 //builder.Services.AddIdentity
 //builder.Services.AddIdentityCore<ApplicationUser>()
