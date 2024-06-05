@@ -14,13 +14,14 @@ namespace IdentityJWT.DataAccess
         private AppDbContext _db;
 
         public IJWTRefreshRepo JwtRefreshToken { get; private set; }
-
+        public IJwtBlacklistTokenRepo JwtBlacklistToken { get; private set; }
         public IEnterpriseLoggingRepo EnterpriseLogging { get; private set; }
 
         public UnitOfWork(AppDbContext db)
         {
             _db = db;
             JwtRefreshToken = new JWTRefreshRepo(_db);
+            JwtBlacklistToken = new JwtBlacklistTokenRepo(_db);
             EnterpriseLogging = new EnterpriseLoggingRepo(_db);
         }
 

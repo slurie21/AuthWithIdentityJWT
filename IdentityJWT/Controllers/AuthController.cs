@@ -9,12 +9,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.ValueGeneration;
 using IdentityJWT.DataAccess.IRepo;
 using IdentityJWT.Utility.Interface;
+using System.Security.Claims;
+using Microsoft.IdentityModel.JsonWebTokens;
 
 namespace IdentityJWT.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
+    [ServiceFilter(typeof(Auth_ConfirmJtiNotBlacklistedFilterAttribute))]
     public class AuthController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -103,6 +106,33 @@ namespace IdentityJWT.Controllers
             LoginResult loginResult = new LoginResult(user,token, refreshToken);
 
             return Ok(loginResult);
+        }
+
+        [HttpDelete("logout")]
+        [GetGuidForLogging]
+        public async Task<IActionResult> Logout()
+        {
+            string correlationID = HttpContext.Items["correlationID"].ToString() ?? "";
+            var userID = HttpContext.User.FindFirstValue("userID");
+            var jti = HttpContext.User.FindFirstValue(JwtRegisteredClaimNames.Jti);
+            long.TryParse(HttpContext.User.FindFirstValue(JwtRegisteredClaimNames.Iat), out long issuedAt);
+            long.TryParse(HttpContext.User.FindFirstValue(JwtRegisteredClaimNames.Exp), out long expiredAt);
+            
+            await _unitOfWork.JwtRefreshToken.DeleteAllRefreshTokensByUserID(userID);
+
+            var authorizationHeader = HttpContext.Request.Headers["Authorization"].FirstOrDefault();
+            string jwtToken = null;
+            if (authorizationHeader != null && authorizationHeader.StartsWith("Bearer "))
+            {
+                jwtToken = authorizationHeader.Substring("Bearer ".Length).Trim();
+            }
+
+            JwtBlacklistToken jwtBlacklist = new JwtBlacklistToken(jti, jwtToken, userID, (DateTimeOffset.FromUnixTimeSeconds(issuedAt)).UtcDateTime, (DateTimeOffset.FromUnixTimeSeconds(expiredAt)).UtcDateTime);
+            await _unitOfWork.JwtBlacklistToken.Add(jwtBlacklist);
+            _logger.LogInformation($"Logging out {userID}");
+            await _unitOfWork.EnterpriseLogging.Add(new EnterpriseLogging { App = "IdentityJWT", Area = "Auth", Note = $"Logging out {userID}", CreatedDate = DateTime.UtcNow, CorrelationID = correlationID ?? Guid.NewGuid().ToString() });
+            await _unitOfWork.Save();
+            return Ok(new { message = "Logout Successful." });
         }
 
     }

@@ -1,6 +1,7 @@
 using IdentityJWT.DataAccess;
 using IdentityJWT.DataAccess.Context;
 using IdentityJWT.DataAccess.IRepo;
+using IdentityJWT.Filters.ActionFilters;
 using IdentityJWT.Models.DTO;
 using IdentityJWT.Utility;
 using IdentityJWT.Utility.Interface;
@@ -92,6 +93,7 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
 builder.Services.AddSingleton<IJwtManager, JwtManager>(); //no reason for a new item each time
+builder.Services.AddScoped<Auth_ConfirmJtiNotBlacklistedFilterAttribute>();
 
 var app = builder.Build();
 

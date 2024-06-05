@@ -9,6 +9,7 @@ namespace IdentityJWT.DataAccess.IRepo
     public interface IUnitOfWork
     {
         IJWTRefreshRepo JwtRefreshToken { get; }
+        IJwtBlacklistTokenRepo JwtBlacklistToken { get; }
         IEnterpriseLoggingRepo EnterpriseLogging { get; }
         Task Save();
     }
