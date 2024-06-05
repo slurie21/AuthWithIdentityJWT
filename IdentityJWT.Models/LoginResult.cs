@@ -22,14 +22,14 @@ namespace IdentityJWT.Models
                 Email = user.Email ?? "",
                 Id = user.Id
             };
-            JwtToken = token;
-            JwtRefreshToken = refreshToken;
+            Token = token;
+            RefreshToken = refreshToken;
         }
 
         public bool LoggedIn { get; set; } = false;
 
         public UserVM? User { get; set; }
-        public string? JwtToken { get; set; }
-        public string? JwtRefreshToken { get; set; }
+        public string? Token { get; set; }
+        public string? RefreshToken { get; set; }
     }
 }
