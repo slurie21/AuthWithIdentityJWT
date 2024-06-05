@@ -25,8 +25,7 @@ namespace IdentityJWT.Models.ViewModels
                 Id = this.Id,
                 Fname = this.Fname,
                 Lname = this.Lname,
-                Email = this.Email,
-                UserName = this.UserName,
+                Email = this.Email
             };
         }
     }

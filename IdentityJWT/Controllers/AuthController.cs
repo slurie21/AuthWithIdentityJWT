@@ -19,16 +19,18 @@ namespace IdentityJWT.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<AuthController> _logger;
         private readonly IJwtManager _jwtManager;
-        public AuthController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IUnitOfWork unitOfWork, ILogger<AuthController> logger, IJwtManager jwtManager)
+        public AuthController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IUnitOfWork unitOfWork, ILogger<AuthController> logger, IJwtManager jwtManager, SignInManager<ApplicationUser> signInManager)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _unitOfWork = unitOfWork;
             _logger = logger;
             _jwtManager = jwtManager;
+            _signInManager = signInManager;
         }
 
         [HttpPost("register")]
@@ -64,6 +66,44 @@ namespace IdentityJWT.Controllers
             return Created(string.Empty, userVM );
         }
 
+
+        [HttpPost("login")]
+        [AllowAnonymous]
+        [GetGuidForLogging]
+        public async Task<IActionResult> Login([FromBody] Login login)
+        {
+            var user = await _signInManager.UserManager.FindByEmailAsync(login.Email);
+            if (user == null)
+            {
+                _logger.LogInformation($"User {login.Email} attempted to log in but was not found by signInManger");
+                return Unauthorized("Username or Password is incorrect.");
+            }
+
+            var passwordCheck = await _signInManager.UserManager.CheckPasswordAsync(user, login.Password);
+            if (!passwordCheck)
+            {
+                _logger.LogInformation($"User {login.Email} attempted to log in had the wrong password.");
+                return Unauthorized("Username or Password is incorrect.");
+            }
+
+            if (!user.IsActive)
+            {
+                return BadRequest("Account has been deactivated. Please reach out to an Administrator.");
+            }
+
+            _logger.LogInformation($"User {user.Email} is logging in and generating JWT Token");
+            // Generate your JWT token here
+            var roles = await _signInManager.UserManager.GetRolesAsync(user);
+            
+            (string token, string refreshToken) = _jwtManager.GenerateJwtandRefreshToken(user, roles.ToList());
+            JWTRefreshToken refreshTokenObject = new JWTRefreshToken(refreshToken, user.Id);
+            
+            await _unitOfWork.JwtRefreshToken.Add(refreshTokenObject);
+            await _unitOfWork.Save();
+            LoginResult loginResult = new LoginResult(user,token, refreshToken);
+
+            return Ok(loginResult);
+        }
 
     }
 }

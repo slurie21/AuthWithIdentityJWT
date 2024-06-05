@@ -18,7 +18,5 @@ namespace IdentityJWT.Models.ViewModels
         public string Lname { get; set; }
         [Required(ErrorMessage = "Email must be supplied")]
         public string Email { get; set; }
-        [Required(ErrorMessage = "Username must be supplied")]
-        public string UserName {  get; set; }
     }
 }

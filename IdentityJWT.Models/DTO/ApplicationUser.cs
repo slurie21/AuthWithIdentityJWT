@@ -17,7 +17,7 @@ namespace IdentityJWT.Models.DTO
 
         public ApplicationUser(UserVM userVM) 
         {
-            Fname = userVM.UserName;
+            Fname = userVM.Fname;
             Lname = userVM.Lname;
             Email = userVM.Email;
             CreatedDate = DateTime.UtcNow;   
@@ -27,14 +27,14 @@ namespace IdentityJWT.Models.DTO
             Fname = registerVM.Fname;
             Lname = registerVM.Lname;
             Email = registerVM.Email;
-            UserName = registerVM.UserName;
+            UserName = registerVM.Email;
             CreatedDate = DateTime.UtcNow;
             EmailConfirmed = true; //remove once email piece in place
         }
 
         public bool IsActive { get; set; } = true;
-        public string Fname { get; set; }
-        public string Lname { get; set; }
+        public string? Fname { get; set; }
+        public string? Lname { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime? DeletedAt { get; set; }
 
