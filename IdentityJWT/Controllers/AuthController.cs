@@ -135,5 +135,22 @@ namespace IdentityJWT.Controllers
             return Ok(new { message = "Logout Successful." });
         }
 
+        [HttpGet("checkUser")]
+        public async Task<IActionResult> CheckUserStatus()
+        {
+            ApplicationUser currentUser = new ApplicationUser();
+            var userID = HttpContext.User.FindFirstValue("userID");
+            if (userID != null)
+            {
+                currentUser = await _signInManager.UserManager.FindByIdAsync(userID);
+            }
+            else
+            {
+                return Forbid("Access Denied");
+            }
+
+            return Ok(new { message = "Confirmed User", user = currentUser });
+        }
+
     }
 }
