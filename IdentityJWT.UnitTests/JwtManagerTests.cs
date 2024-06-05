@@ -6,6 +6,7 @@ using FluentAssertions;
 using IdentityJWT.Utility.Interface;
 using IdentityJWT.Models.DTO;
 using IdentityJWT.Utility;
+using Xunit.Sdk;
 
 namespace IdentityJWT.UnitTests
 {
@@ -51,5 +52,21 @@ namespace IdentityJWT.UnitTests
             token.Should().NotBeNullOrEmpty();
             token.Should().BeOfType<string>();
         }
+
+        [Fact]
+        public async Task GenerateJwtRefreshToken_ValidateRefreshCorrect()
+        {
+            // Arrange
+            var user = new ApplicationUser { Id = "123", UserName = "john.doe", Email = "john.doe@example.com", Fname = "John", Lname = "Doe" };
+            (string token, string refreshToken) = _jwtManager.GenerateJwtandRefreshToken(user, null);
+
+            //Act
+            bool valid = await _jwtManager.RefreshTokenValidate(refreshToken);
+
+            // Assert
+            valid.Should().BeTrue();
+        }
+
+       
     }
 }
