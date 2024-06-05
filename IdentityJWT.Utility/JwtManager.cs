@@ -30,7 +30,7 @@ namespace IdentityJWT.Utility
         }
 
 
-        public string GenerateJwtToken(ApplicationUser user, List<string> roles)
+        public string GenerateJwtToken(ApplicationUser user, List<string>? roles = null)
         {
             var claims = new List<Claim>
             {
@@ -39,12 +39,13 @@ namespace IdentityJWT.Utility
                 new Claim(ClaimTypes.Name, $"{user.Fname} {user.Lname}"),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
-            foreach (var role in roles)
+            if(roles != null)
             {
-                claims.Add(new Claim(ClaimTypes.Role, role));
+                foreach (var role in roles)
+                {
+                    claims.Add(new Claim(ClaimTypes.Role, role));
+                }
             }
-
-
             var tokenHandler = new JwtSecurityTokenHandler();
             //var jwt_secret = Environment.GetEnvironmentVariable("JWT_Secret") ?? throw new InvalidOperationException("no JWT secret set");
             var jwt_secret = _config["JWT_Secret"] ?? throw new InvalidOperationException("no JWT secret set");

@@ -20,6 +20,7 @@
   <ItemGroup>
     <ProjectReference Include="..\IdentityJWT.DataAccess\IdentityJWT.DataAccess.csproj" />
     <ProjectReference Include="..\IdentityJWT.Models\IdentityJWT.Models.csproj" />
+    <ProjectReference Include="..\IdentityJWT.Utility\IdentityJWT.Utility.csproj" />
   </ItemGroup>
 
 </Project>

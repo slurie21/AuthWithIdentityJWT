@@ -9,6 +9,9 @@ namespace IdentityJWT.Models.ViewModels
 {
     public class UserVM
     {
+
+        public string? Id { get; set; }
+
         [Required(ErrorMessage ="First Name must be supplied")]
         public string Fname { get; set; }
         [Required(ErrorMessage = "Last Name must be supplied")]

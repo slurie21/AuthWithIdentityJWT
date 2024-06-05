@@ -1,5 +1,9 @@
+using IdentityJWT.DataAccess;
 using IdentityJWT.DataAccess.Context;
+using IdentityJWT.DataAccess.IRepo;
 using IdentityJWT.Models.DTO;
+using IdentityJWT.Utility;
+using IdentityJWT.Utility.Interface;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -23,6 +27,7 @@ builder.Services.AddIdentityApiEndpoints<ApplicationUser>(options =>
     {
         options.User.RequireUniqueEmail = true;
         options.SignIn.RequireConfirmedEmail = false;
+        options.Password.RequireNonAlphanumeric = false;
     }
 
     )
@@ -84,6 +89,9 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 }); //the above will allow me to pass through the JWT through swagger to be able to test secured endpoints
+
+builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
+builder.Services.AddSingleton<IJwtManager, JwtManager>(); //no reason for a new item each time
 
 var app = builder.Build();
 

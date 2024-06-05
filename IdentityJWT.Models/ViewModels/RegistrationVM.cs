@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Text.Json;
 using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel;
 
 
 namespace IdentityJWT.Models.ViewModels
@@ -14,7 +15,19 @@ namespace IdentityJWT.Models.ViewModels
     {
         [JsonProperty]
         [Required]
+        [PasswordPropertyText]
         public string Password { get; set; }
 
+        public UserVM GetUserVM()
+        {
+            return new UserVM
+            {
+                Id = this.Id,
+                Fname = this.Fname,
+                Lname = this.Lname,
+                Email = this.Email,
+                UserName = this.UserName,
+            };
+        }
     }
 }

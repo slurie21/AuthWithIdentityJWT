@@ -16,10 +16,10 @@ namespace IdentityJWT.Models
         public string Area { get; set; }
         public string Note { get; set; }
         public DateTime CreatedDate { get; set; }
-        public string StackTrace { get; set; }
-        public string App { get; set; }
+        public string? StackTrace { get; set; }
+        public string? App { get; set; } //Added if putting into eco system where more than one app puts data
         public string CorrelationID { get; set; }
-        public string InnerException { get; set; }
-        public string Exception { get; set; }
+        public string? InnerException { get; set; }
+        public string? Exception { get; set; }
     }
 }
