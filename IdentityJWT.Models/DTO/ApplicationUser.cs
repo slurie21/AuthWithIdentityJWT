@@ -38,5 +38,16 @@ namespace IdentityJWT.Models.DTO
         public DateTime CreatedDate { get; set; }
         public DateTime? DeletedAt { get; set; }
 
+        public UserVM GetUserVM()
+        {
+            return new UserVM
+            {
+                Email = this.Email,
+                Fname = this.Fname,
+                Lname = this.Lname,
+                Id = this.Id
+            };
+        }
+
     }
 }

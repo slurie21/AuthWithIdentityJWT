@@ -135,6 +135,45 @@ namespace IdentityJWT.Controllers
             return Ok(new { message = "Logout Successful." });
         }
 
+        [HttpPost("refreshToken")]
+        [AllowAnonymous]
+        [GetGuidForLogging]
+        public async Task<IActionResult> RefreshToken([FromBody] string refreshToken)
+        {
+            if(string.IsNullOrEmpty(refreshToken))
+            {
+                return BadRequest("Invalid Request");
+            }
+
+            string correlationID = HttpContext.Items["correlationID"].ToString() ?? "";
+            bool refreshTokenValid = await _jwtManager.RefreshTokenValidate(refreshToken);
+            
+            var refreshTokenObj = _unitOfWork.JwtRefreshToken.Get(t => t.Token.Equals(refreshToken));
+            if (refreshTokenObj == null)
+            {
+                return BadRequest("Invalid refresh token.");
+            }
+            //deleting the refreshToken so that when we use it we can get rid of it so it cant be reused
+            await _unitOfWork.JwtRefreshToken.Remove(refreshTokenObj);
+
+            var user = await _signInManager.UserManager.FindByIdAsync(refreshTokenObj.UserId);
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+            var roles = await _signInManager.UserManager.GetRolesAsync(user);
+            (string token, string newRefreshToken) = _jwtManager.GenerateJwtandRefreshToken(user, roles.ToList());
+            JWTRefreshToken refreshTokenObject = new JWTRefreshToken(newRefreshToken, user.Id);
+
+            await _unitOfWork.JwtRefreshToken.Add(refreshTokenObject);
+            _logger.LogInformation($"Removed old refresh token for {user.UserName} and added new one");
+            await _unitOfWork.EnterpriseLogging.Add(new EnterpriseLogging { App = "IdentityJWT", Area = "Auth", Note = $"Removed old refresh token for {user.UserName} and added new one", CreatedDate = DateTime.UtcNow, CorrelationID = correlationID ?? Guid.NewGuid().ToString() });
+            await _unitOfWork.Save();
+
+
+            return Ok(new { Token = token, refreshToken = newRefreshToken });
+        }
+
         [HttpGet("checkUser")]
         public async Task<IActionResult> CheckUserStatus()
         {
@@ -149,7 +188,7 @@ namespace IdentityJWT.Controllers
                 return Forbid("Access Denied");
             }
 
-            return Ok(new { message = "Confirmed User", user = currentUser });
+            return Ok(new { message = "Confirmed User", user = currentUser.GetUserVM() });
         }
 
     }
