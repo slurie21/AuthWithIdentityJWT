@@ -18,7 +18,9 @@ namespace IdentityJWT.DataAccess.Context
         
 
         public DbSet<JWTRefreshToken> JwtRefreshToken { get; set; }
+        public DbSet<JwtBlacklistToken> JwtBlacklistToken { get; set; }
         public DbSet<EnterpriseLogging> EnterpriseLogging { get; set; }
+
 
     }
 }

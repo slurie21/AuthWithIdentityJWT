@@ -22,11 +22,11 @@ namespace IdentityJWT.Filters.ActionFilters
             
             if (!string.IsNullOrEmpty(jti))
             {
-                //var result  = _unitOfWork.JwtBlacklistToken.Get(x => x.Jti == jti);
-                //if(result != null)
-                //{
-                //    context.Result = new UnauthorizedResult(); 
-                //}
+                var result = _unitOfWork.JwtBlacklistToken.Get(x => x.Jti == jti);
+                if (result != null)
+                {
+                    context.Result = new UnauthorizedResult();
+                }
             }
 
         }
