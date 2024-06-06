@@ -36,38 +36,7 @@ namespace IdentityJWT.Controllers
             _signInManager = signInManager;
         }
 
-        [HttpPost("register")]
-        [AllowAnonymous]
-        [GetGuidForLogging] 
-        public async Task<IActionResult> Register([FromBody] RegistrationVM registrationVM)
-        {
-            string correlationID = HttpContext.Items["correlationID"].ToString() ?? "";
-            
-            _logger.LogInformation($"Starting process of creating new user and assigning roles. Correlation ID: {correlationID}");
-            ApplicationUser newUser = new ApplicationUser(registrationVM);
-            
-            var createUserResult = await _userManager.CreateAsync(newUser, registrationVM.Password);
-            if (createUserResult.Succeeded)
-            {
-                registrationVM.Id = newUser.Id;
-                await _unitOfWork.EnterpriseLogging.Add(new EnterpriseLogging { App = "IdentityJWT", Area = "Auth", Note = $"User {newUser.Fname + " " + newUser.Lname} has been created successfully.", CreatedDate = DateTime.UtcNow, CorrelationID = correlationID });
-                _logger.LogInformation($"New user {registrationVM.Fname + registrationVM.Lname} created successfully.");
-            }
-            else
-            {
-                var errors = createUserResult.Errors.Select(e => e.Description);
-                var errorString = string.Join(", ", errors);
-                await _unitOfWork.EnterpriseLogging.Add(new EnterpriseLogging { App = "IdentityJWT", Area = "Auth", Note = $"User {newUser.Fname + " " + newUser.Lname} has failed to be created.", StackTrace = errorString, CreatedDate = DateTime.UtcNow, CorrelationID = correlationID });
-                _logger.LogInformation($"User registration of {registrationVM.Fname + registrationVM.Lname} had an issue.");
-                await _unitOfWork.Save();
-                return BadRequest(new { errors = createUserResult.Errors, user = registrationVM} );
-            }
-            await _unitOfWork.Save();
 
-            //generate a token to send back to the user along with a refresh token
-            UserVM userVM = registrationVM.GetUserVM();
-            return Created(string.Empty, userVM );
-        }
 
 
         [HttpPost("login")]

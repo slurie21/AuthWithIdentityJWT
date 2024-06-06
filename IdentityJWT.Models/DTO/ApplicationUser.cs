@@ -34,7 +34,7 @@ namespace IdentityJWT.Models.DTO
 
         public bool IsActive { get; set; } = true;
         public string Fname { get; set; }
-        public string Lname { get; set; }
+        public string Lname { get; set; } 
         public DateTime CreatedDate { get; set; }
         public DateTime? DeletedAt { get; set; }
 

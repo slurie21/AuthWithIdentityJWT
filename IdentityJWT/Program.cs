@@ -29,6 +29,7 @@ builder.Services.AddIdentityApiEndpoints<ApplicationUser>(options =>
         options.User.RequireUniqueEmail = true;
         options.SignIn.RequireConfirmedEmail = false;
         options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequiredLength = 1;
     }
 
     )
