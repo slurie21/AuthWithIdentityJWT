@@ -10,3 +10,10 @@
 /IdentityJWT.DataAccess/obj
 /IdentityJWT.Models/bin/Debug/net8.0
 /IdentityJWT.Models/obj
+/IdentityJWT/obj
+/IdentityJWT.DataAccess/bin/Debug/net8.0
+/IdentityJWT.UnitTests/obj
+/IdentityJWT.UnitTests/bin/Debug/net8.0
+/IdentityJWT.Utility/bin/Debug/net8.0
+/IdentityJWT.Utility/obj/Debug/net8.0
+/IdentityJWT.Utility/obj
